@@ -12,30 +12,34 @@ const ctcBob = accBob.contract(backend, ctcAlice.getInfo());
 
 const getBalance = async (who) => stdlib.formatCurrency(await stdlib.balanceOf(who));
 
+console.log(`Alice's balance before is: ${getBalance(accAlice)}`);
+console.log(`Bob's balance before is: ${getBalance(accBob)}`);
+
 console.log('Starting backends...');
 
-const commonInteract = (who) => {
-  return (value) => {
-    console.log(`Remianing time for ${who} is ${parseInt(value)} seconds ...`);
+const commonInteract = () => ({
+  showTime: (t) => {
+    console.log(`Remianing time for ${who} is ${t} seconds ...`);
   }
-}
+})
 
 await Promise.all([
   backend.Alice(ctcAlice, {
     ...stdlib.hasRandom,
     inherit: stdlib.parseCurrency(5000),
-    showTime: commonInteract('Alice'),
+    ...commonInteract(),
     getChoice: () => {
       const choice = Math.floor(Math.random() * 2);
       const choiceMessage = !!choice ? 'I am still here!' : 'I am not here!'
       console.log(`Choice is: ${choiceMessage}`);
-      return !!choice;
+      //return !!choice;
+      return true;
     }
     // implement Alice's interact object here
   }),
   backend.Bob(ctcBob, {
     ...stdlib.hasRandom,
-    showTime: commonInteract('Bob'),
+    ...commonInteract(),
     acceptTerms: (amount) => {
       console.log(`Bob has accepted the terms for a value of ${stdlib.formatCurrency(amount)}.`)
       return true;
@@ -44,4 +48,6 @@ await Promise.all([
   }),
 ]);
 
+console.log(`Alice's account balance after is: ${getBalance(accAlice)}`);
+console.log(`Bob's account balance after is: ${getBalance(accBob)}`);
 console.log('Goodbye, Alice and Bob!');

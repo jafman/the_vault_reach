@@ -20,13 +20,13 @@ export const main = Reach.App(() => {
 
   // The first one to publish deploys the contract
   A.only(() => {
-    const value = declassify(interact.inherit);
+    const amount = declassify(interact.inherit);
   });
-  A.publish(value).pay(value);
+  A.publish(amount).pay(amount);
   commit();
 
   B.only(() => {
-    const decision = declassify(interact.acceptTerms(value));
+    const decision = declassify(interact.acceptTerms(amount));
   });
   // The second one to publish always attaches
   B.publish(decision);
@@ -41,9 +41,9 @@ export const main = Reach.App(() => {
   A.publish(stillHere);
 
   if(stillHere) {
-    transfer(value).to(A);
+    transfer(amount).to(A);
   } else {
-    transfer(value).to(B);
+    transfer(amount).to(B);
   }
 
   commit();
