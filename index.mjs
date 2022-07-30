@@ -19,7 +19,7 @@ console.log('Starting backends...');
 
 const commonInteract = () => ({
   showTime: (t) => {
-    console.log(`Remianing time for ${who} is ${t} seconds ...`);
+    console.log(`Remaining time for is ${t} seconds ...`);
   }
 })
 
